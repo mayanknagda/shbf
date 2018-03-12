@@ -159,6 +159,7 @@ img {vertical-align: middle;}
 
 
       <ul class="right">
+      <li><a href="events.php">Events</a></li>
         <li><a href="facilities.php">Facilities</a></li>
         <li><a href="hallbook.php">Hall Bookings</a></li>';
         if(isset($_SESSION['username'])){

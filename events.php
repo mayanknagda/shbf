@@ -1,15 +1,16 @@
 <?php
 include ('php/session.php');
 include ('php/config.php');
-include ('php/head.php'); 
+include ('php/head.php');
 ?>
 
     <div class="row" style="margin-top:30px;">
       <div class="small-12">
+        <h1 style="color:red">Events coming up-</h1>
         <div class="scrollit">
         <?php
           $i=1;
-          $result = $mysqli->query('SELECT * FROM halls');
+          $result = $mysqli->query('SELECT * FROM events');
           if($result === FALSE){
             die(mysql_error());
           }
@@ -20,16 +21,16 @@ include ('php/head.php');
                   <div class="small-12">';
               }
               echo '<div class="large-6 columns" >';
-              echo '<div class="card">';
-              echo '<img src="images/'.$obj->image.'"/>';
               echo '<div class="container">';
-              echo '<p>Located: '.$obj->located.'</p>';
-              echo '<p>Capacity: '.$obj->capacity.'</p>';
-              echo '<p><strong>Person Incharge</strong>: '.$obj->incharge.'</p>';
+              echo '<div class="card">';
+              echo '<img src="images/uploads/'.$obj->img.'" height="500" width="500"/>';
+
+              echo '<p><b>Event Name: </b>'.$obj->name.'</p>';
+
               echo '<div id="myModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-                    <h2 id="modalTitle">Awesome. I have it.</h2>
-                    <p class="lead">Your couch.  It is mine.</p>
-                    <p>Im a cool paragraph that lives inside of an even cooler modal. Wins!</p>
+                <p><b>Description: </b>'.$obj->description.'</p>
+                <p><strong>Registration/Information Link: </strong>'.$obj->reg.'</p>
+                <p><strong>Contact Person Detail: </strong>'.$obj->contact.'</p>
                     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
                     </div>';
               echo '<a href="#" data-reveal-id="myModal" class="radius button">Learn More</a>';
@@ -54,9 +55,9 @@ include ('php/head.php');
     <style>
       .card {
     /* Add shadows to create the "card" effect */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(55,105,105,1.7);
     transition: 0.3s;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 /* On mouse-over, add a deeper shadow */

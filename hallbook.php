@@ -16,11 +16,11 @@ include ('php/head.php');
              echo '<form action="cart.php" method="POST">';
             while($obj = $result->fetch_object()) {
               if($i%3==0){
-              echo'<div class="row" style="margin-top:10px;">
-                  <div class="small-12">';
+              echo'<div class="row">';
+
               }
               echo '<div class="large-4 columns" >';
-              echo '<div class="colorful">';
+              echo '<div class="card">';
               echo '<p><h3>'.$obj->name.'</h3></p>';//product name ye wala he, upar print hoga
               echo '<img src="images/'.$obj->image.'"/>';
               echo '<p>Located: '.$obj->located.'</p>';
@@ -30,7 +30,7 @@ include ('php/head.php');
               echo '</div>';
               echo '</div>';
               if($i%3==0){
-              echo'</div></div>';
+              echo'</div>';
               }
               $i++;
             }
@@ -42,6 +42,27 @@ include ('php/head.php');
           ?>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/foundation.min.js"></script>
+    <style>
+      .card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(55,105,105,1.7);
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+    padding: 2px 16px;
+}
+img {
+    border-radius: 5px 5px 0 0;
+}
+    </style>
     <script>
       $(document).foundation();
     </script>

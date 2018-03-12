@@ -7,7 +7,7 @@ require 'vendor/autoload.php';
 
 <?php
 include ('php/session.php');
-//include ('php/login_check.php');
+include ('php/login_check.php');
 include ('php/config.php');
 include ('php/head.php');
 include ('php/data.php');
@@ -47,21 +47,20 @@ include ('php/data.php');
 <!--DO NOT EDIT THE CODE BELOW IF YOU DON'T KNOW WHAT YOU ARE DOING!-->
 <!--DO NOT EDIT THE CODE BELOW IF YOU DON'T KNOW WHAT YOU ARE DOING!-->
 <!--DO NOT EDIT THE CODE BELOW IF YOU DON'T KNOW WHAT YOU ARE DOING!-->
+
+
 <?php
     // GLOBAL FLAGS
-
-
 if(!empty($_POST)) // Used to stop a user from jumping to this page without properly filling the last one
 {
-    
     // POST Variabes from the previous page.
     $go_for_book=0;
     $wdate = $_POST['date'];
     $date = date('Y-m-d', strtotime($wdate));
-    $event= $_POST['event'];
+    $reason= $_POST['reason'];
     $hall_id=$_POST['hallid'];
        echo $date;
-       echo $event;
+       echo $reason;
        echo $hall_id;
     // Check if the hall is booked
     $c=$mysqli->query("SELECT * from orders WHERE date_of_order='$date' AND hall_id='$hall_id' ");
@@ -76,34 +75,24 @@ if(!empty($_POST)) // Used to stop a user from jumping to this page without prop
 
     if($go_for_book==1)
     {
-
     // Get the details of the user from the database.
     $un=$_SESSION["username"]; // $un has the user's email address
     $q1=$mysqli->query("SELECT id, fname, lname, club, phno FROM users WHERE email='$un'");
     $q1_result=$q1->fetch_object();
-
     $id=$q1_result->id; // store id from query.
     $first_name=$q1_result->fname; //store first name from query.
     $last_name=$q1_result->lname; // store ladt name from query.
     $club=$q1_result->club; //User club details
-    $phno=$q1_result->phno; //User phone number 
+    $phno=$q1_result->phno; //User phone number
     // END of fetch of user details
-
-
-    
-       
     // Fetch the details of the hall
     $q2=$mysqli->query("SELECT * from halls WHERE sno='$hall_id' ");
     $q2_result=$q2->fetch_object();
-
-
-
 
         echo ' <div class="myown" style="margin-top:10px;" width: 400px> ';
         echo  ' <div class="myown" width: 400px> ';
         echo ' <p><h3>Booking Details</h3></p> ';
         echo'<input type="button" value="Print this page" onClick="window.print()">';
-
 
         // Order id manual creation.
         $oi;// Order_id
@@ -121,7 +110,7 @@ if(!empty($_POST)) // Used to stop a user from jumping to this page without prop
 
         $in_id=(int)$id;
 
-        $push=$mysqli->query("INSERT INTO orders (user_id, date_of_order, hall_id, reason, order_id) VALUES ($in_id,'$date','$hall_id','$event',$oi)");
+        $push=$mysqli->query("INSERT INTO orders (user_id, date_of_order, hall_id, reason, order_id) VALUES ($in_id,'$date','$hall_id','$reason',$oi)");
         if($push)
         {
             echo 'YES';
@@ -131,10 +120,6 @@ if(!empty($_POST)) // Used to stop a user from jumping to this page without prop
             echo 'NO';
             $go_for_print=0;
         }
-
-    
-    
-
 
     if($go_for_print==1)
     {
@@ -187,7 +172,7 @@ if(!empty($_POST)) // Used to stop a user from jumping to this page without prop
         echo '<td colspan="1" align="left">'.$q2_result->name.'</td>';
 
         echo '<td colspan="1" align="left">'.$q2_result->located.'</td>';
-      
+
         echo '<td colspan="1" align="left">'.$q2_result->capacity.'</td>';
 
         echo '<td colspan="1" align="left">'.$q2_result->incharge.'</td>';
@@ -212,6 +197,66 @@ else
     echo '<p align="center"><img src="images/hack.jpg"></img></p>';
     echo '<footer><p align="center"> /Developed by Department of CSE, SRMIST, KTR/</p> </footer>';
 }
+
+
+if($_POST['ename']){
+//File upload php
+$target_dir = "images/uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
+}
+// Check if file already exists
+if (file_exists($target_file)) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+}
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 500000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+}
+// Allow certain file formats
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+}
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+} else {
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
+
+$fname=basename($_FILES["fileToUpload"]["name"]);
+$ename=$_POST['ename'];
+$edetails=$_POST['edetails'];
+$elink=$_POST['elink'];
+$econtact=$_POST['econtact'];
+
+$push1=$mysqli->query("INSERT INTO events (event_id, name, description, img, reg, contact) VALUES ($oi, '$ename','$edetails','$fname','$elink','$econtact')");
+
+}
+?>
+
+<?php
+
 ?>
   </body>
   </html>
